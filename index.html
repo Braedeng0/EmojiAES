@@ -34,7 +34,7 @@
     <h1 id="title">Emoji AES</h1>
   </div>
   
-  <form id="input-form">
+  <form id="myForm">
     <div class="inputs">
       <input autocomplete="off", id="encode-input" name="encode-input" placeholder="Message to encode">
       <button type="button" onclick="performAction('encode')">Encode</button>
@@ -55,37 +55,31 @@
   </div>
 
   <script>
-  function performAction(action) {
-    const formData = new FormData(document.getElementById('input-form'));
-    const url = 'https://braedeng.pythonanywhere.com/' + action;
-    const headers = new Headers();
+    function performAction(action) {
+      var formData = new FormData(document.getElementById('myForm'));
 
-    const encodedData = new URLSearchParams(formData).toString();
+      fetch('https://braedeng.pythonanywhere.com/' + action, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        var outputElement = document.getElementById('output');
+        var keyInput = document.getElementById('key-input');
+        var encodeInput = document.getElementById('encode-input');
+        var decodeInput = document.getElementById('decode-input');
 
-    headers.set('Content-Type', 'application/x-www-form-urlencoded');
+        if (action === 'generate_key') {
+          outputElement.innerText = "Key set to: " + data.result;
+          keyInput.value = data.result;
+        } else {
+          outputElement.innerText = data.result;
+        }
 
-    fetch(url + '?' + encodedData, {
-      method: 'GET',
-      headers: headers
-    })
-    .then(response => response.json())
-    .then(data => {
-      var outputElement = document.getElementById('output');
-      var keyInput = document.getElementById('key-input');
-      var encodeInput = document.getElementById('encode-input');
-      var decodeInput = document.getElementById('decode-input');
-
-      if (action === 'generate_key') {
-        outputElement.innerText = "Key set to: " + data.result;
-        keyInput.value = data.result;
-      } else {
-        outputElement.innerText = data.result;
-      }
-
-      decodeInput.value = "";
-      encodeInput.value = "";
-    });
-  }
+        decodeInput.value = "";
+        encodeInput.value = "";
+      });
+    }
   </script>
 
 
