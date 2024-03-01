@@ -76,9 +76,9 @@
   fetch('https://braedeng.pythonanywhere.com/' + action, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json' // Set the content type to JSON
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data) // Convert data to JSON format
+    body: JSON.stringify(data)
   })
   .then(response => response.json())
   .then(data => {
