@@ -55,34 +55,31 @@
   </div>
 
   <script>
-    function performAction(action) {
-      var formData = new FormData(document.getElementById('input-form'));
-      var url = 'https://braedeng.pythonanywhere.com/' + action;
-      console.log(url)
-      console.log(formData)
+function performAction(action, data = {}) {
+  var url = new URL('https://braedeng.pythonanywhere.com/' + action);
+  url.search = new URLSearchParams(data);
+  console.log(url);
 
-      fetch(url, {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        var outputElement = document.getElementById('output');
-        var keyInput = document.getElementById('key-input');
-        var encodeInput = document.getElementById('encode-input');
-        var decodeInput = document.getElementById('decode-input');
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      var outputElement = document.getElementById('output');
+      var keyInput = document.getElementById('key-input');
+      var encodeInput = document.getElementById('encode-input');
+      var decodeInput = document.getElementById('decode-input');
 
-        if (action === 'generate_key') {
-          outputElement.innerText = "Key set to: " + data.result;
-          keyInput.value = data.result;
-        } else {
-          outputElement.innerText = data.result;
-        }
+      if (action === 'generate_key') {
+        outputElement.innerText = "Key set to: " + data.result;
+        keyInput.value = data.result;
+      } else {
+        outputElement.innerText = data.result;
+      }
 
-        decodeInput.value = "";
-        encodeInput.value = "";
-      });
-    }
+      decodeInput.value = "";
+      encodeInput.value = "";
+    });
+}
+
   </script>
 
 
