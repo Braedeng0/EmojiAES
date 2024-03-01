@@ -55,12 +55,19 @@
   </div>
 
   <script>
-function performAction(action, data = {}) {
-  var url = new URL('https://braedeng.pythonanywhere.com/' + action);
-  url.search = new URLSearchParams(data);
-  console.log(url);
+  function performAction(action) {
+    const formData = new FormData(document.getElementById('input-form'));
+    const url = 'https://braedeng.pythonanywhere.com/' + action;
+    const headers = new Headers();
 
-  fetch(url)
+    const encodedData = new URLSearchParams(formData).toString();
+
+    headers.set('Content-Type', 'application/x-www-form-urlencoded');
+
+    fetch(url + '?' + encodedData, {
+      method: 'GET',
+      headers: headers
+    })
     .then(response => response.json())
     .then(data => {
       var outputElement = document.getElementById('output');
@@ -78,8 +85,7 @@ function performAction(action, data = {}) {
       decodeInput.value = "";
       encodeInput.value = "";
     });
-}
-
+  }
   </script>
 
 
