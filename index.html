@@ -55,31 +55,43 @@
   </div>
 
   <script>
-    function performAction(action) {
-      var formData = new FormData(document.getElementById('myForm'));
-
-      fetch('https://braedeng.pythonanywhere.com/' + action, {
-        method: 'POST',
-        body: formData
-      })
+  window.addEventListener('load', (event) => {
+    fetch('https://braedeng.pythonanywhere.com/new_session')
       .then(response => response.json())
       .then(data => {
-        var outputElement = document.getElementById('output');
-        var keyInput = document.getElementById('key-input');
-        var encodeInput = document.getElementById('encode-input');
-        var decodeInput = document.getElementById('decode-input');
-
-        if (action === 'generate_key') {
-          outputElement.innerText = "Key set to: " + data.result;
-          keyInput.value = data.result;
-        } else {
-          outputElement.innerText = data.result;
-        }
-
-        decodeInput.value = "";
-        encodeInput.value = "";
+        document.cookie = "TOKEN=" + data.token;
+      })
+      .catch(error => {
+        console.error('Error:', error);
       });
-    }
+  });
+  
+  function performAction(action) {
+    var formData = new FormData(document.getElementById('myForm'));
+
+    fetch('https://braedeng.pythonanywhere.com/' + action, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      var outputElement = document.getElementById('output');
+      var keyInput = document.getElementById('key-input');
+      var encodeInput = document.getElementById('encode-input');
+      var decodeInput = document.getElementById('decode-input');
+      var token = document.cookie.split('; ').find(row => row.startsWith('TOKEN')).split('=')[1];
+
+      if (action === 'generate_key') {
+        outputElement.innerText = "Key set to: " + data.result;
+        keyInput.value = data.result;
+      } else {
+        outputElement.innerText = data.result;
+      }
+
+      decodeInput.value = "";
+      encodeInput.value = "";
+    });
+  }
   </script>
 
 
