@@ -58,6 +58,8 @@
     function performAction(action) {
       var formData = new FormData(document.getElementById('input-form'));
       var url = 'https://braedeng.pythonanywhere.com/' + action;
+      console.log(url)
+      console.log(formData)
 
       fetch(url, {
         method: 'POST',
