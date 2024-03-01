@@ -34,7 +34,7 @@
     <h1 id="title">Emoji AES</h1>
   </div>
   
-  <form id="myForm">
+  <form id="input-form">
     <div class="inputs">
       <input autocomplete="off", id="encode-input" name="encode-input" placeholder="Message to encode">
       <button type="button" onclick="performAction('encode')">Encode</button>
@@ -56,9 +56,10 @@
 
   <script>
     function performAction(action) {
-      var formData = new FormData(document.getElementById('myForm'));
+      var formData = new FormData(document.getElementById('input-form'));
+      var url = 'https://braedeng.pythonanywhere.com/' + action;
 
-      fetch('/' + action, {
+      fetch(url, {
         method: 'POST',
         body: formData
       })
