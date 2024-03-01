@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <style>
+    html {
+      height: 100%;
+      width: 100%;
+    }
+
+    h1 {
+      font-family: sans-serif;
+      padding: 2px;
+    }
+
+    .output {
+      font-family: sans-serif;
+    }
+
+    .inputs {
+      padding: 4px;
+    }
+
+    #output-div {
+      display: inline;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="title">
+    <h1 id="title">Emoji AES</h1>
+  </div>
+  
+  <form id="myForm">
+    <div class="inputs">
+      <input autocomplete="off", id="encode-input" name="encode-input" placeholder="Message to encode">
+      <button type="button" onclick="performAction('encode')">Encode</button>
+    </div>
+    <div class="inputs">
+      <input autocomplete="off", id="decode-input" name="decode-input" placeholder="Message to decode">
+      <button type="button" onclick="performAction('decode')">Decode</button>
+    </div>
+    <div class="inputs">
+      <input autocomplete="off", id="key-input" name="key-input" placeholder="Leave blank to generate a new key">
+      <button type="button" onclick="performAction('generate_key')">Generate/Set Key</button>
+    </div>
+  </form>
+
+  <div id="output-div">
+    <h3 class="output">Result:</h3>
+    <h4 id="output" class="output"></h4>
+  </div>
+
+  <script>
+    function performAction(action) {
+      var formData = new FormData(document.getElementById('myForm'));
+
+      fetch('/' + action, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        var outputElement = document.getElementById('output');
+        var keyInput = document.getElementById('key-input');
+        var encodeInput = document.getElementById('encode-input');
+        var decodeInput = document.getElementById('decode-input');
+
+        if (action === 'generate_key') {
+          outputElement.innerText = "Key set to: " + data.result;
+          keyInput.value = data.result;
+        } else {
+          outputElement.innerText = data.result;
+        }
+
+        decodeInput.value = "";
+        encodeInput.value = "";
+      });
+    }
+  </script>
+
+
+</body>
+
+</html>
