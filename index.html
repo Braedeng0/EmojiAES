@@ -76,7 +76,8 @@
   fetch('https://braedeng.pythonanywhere.com/' + action, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization' : document.cookie.split('; ').find(row => row.startsWith('TOKEN')).split('=')[1]
     },
     body: JSON.stringify(data)
   })
@@ -86,8 +87,6 @@
     var keyInput = document.getElementById('key-input');
     var encodeInput = document.getElementById('encode-input');
     var decodeInput = document.getElementById('decode-input');
-    var token = document.cookie.split('; ').find(row => row.startsWith('TOKEN')).split('=')[1];
-    console.log(token)
 
     if (action === 'generate_key') {
       outputElement.innerText = "Key set to: " + data.result;
